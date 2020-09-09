@@ -2,19 +2,13 @@ import {
 	Component,
 	OnInit,
 	OnDestroy,
-	AfterViewInit,
-	Inject,
 	HostListener,
-	NgZone,
-	ViewChild,
-	ElementRef,
 	Host,
 	Input,
 	Output,
 	EventEmitter,
 	HostBinding
 } from '@angular/core';
-import { DOCUMENT } from '@angular/common';
 import { FileService } from '../file.service';
 import { Subscription, Subject, Observable } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -52,7 +46,7 @@ import { FileError } from '../interfaces';
 		])
 	]
 })
-export class NgxFilezoneComponent implements OnInit, AfterViewInit, OnDestroy {
+export class NgxFilezoneComponent implements OnInit, OnDestroy {
 
 	private _maxFileSize: number;
 
@@ -72,10 +66,11 @@ export class NgxFilezoneComponent implements OnInit, AfterViewInit, OnDestroy {
 
 	public readonly destroy: Observable<void>;
 
-	private tracker: number;
+	private _tracker: number;
 
-	private dropAllowed: boolean;
+	private _dropAllowed: boolean;
 
+	private _highlighted: boolean;
 
 	@Input() set accept(value: string) {
 		this.fileService.setAcceptableTypes(value);
@@ -89,58 +84,58 @@ export class NgxFilezoneComponent implements OnInit, AfterViewInit, OnDestroy {
 		this._maxFileNumber = this.fileService.setMaxFileNumber(value);
 	}
 
-	@ViewChild('input') private _inputField: ElementRef<HTMLInputElement>;
-
 	@Output() private filesChange: EventEmitter<Array<File>> = new EventEmitter<Array<File>>();
 
 	@Output() private errors: EventEmitter<Array<FileError>> = new EventEmitter<Array<FileError>>();
 
-	@HostBinding('class.highlighted') private highlighted: boolean;
-
-	@HostListener('dragover', ['$event']) private allowCopy(e: DragEvent) {
-		this.dropAllowed = true;
+	@HostBinding('class.highlighted') get highlighted() {
+		return this._highlighted;
 	}
 
-	@HostListener('dragleave') private disallowCopy() {
-		this.dropAllowed = false;
+	@HostListener('dragover') allowCopy() {
+		this._dropAllowed = true;
+	}
+
+	@HostListener('dragleave') disallowCopy() {
+		this._dropAllowed = false;
 	}
 
 	@HostListener('drop', ['$event']) public receiveFiles($event: any) {
 		const $files: FileList = $event.target.files ? $event.target.files : $event.dataTransfer.files;
-		this.tracker = 0;
+		this._tracker = 0;
 		this.unhighlight();
 		this.fileService.receiveFiles($files);
 	}
 
-	@HostListener('window:dragenter', ['$event']) private countUp(event: DragEvent) {
-		if (!this.tracker) {
+	@HostListener('window:dragenter') countUp() {
+		if (!this._tracker) {
 			this.highlight();
 		}
-		++this.tracker;
+		++this._tracker;
 	}
 
-	@HostListener('window:dragleave', ['$event']) private countDown() {
-		--this.tracker;
-		if (!this.tracker) this.unhighlight();
+	@HostListener('window:dragleave') countDown() {
+		--this._tracker;
+		if (!this._tracker) this.unhighlight();
 	}
 
-	@HostListener('window:dragover', ['$event']) private windragover(e: DragEvent) {
-		if (this.dropAllowed) e.dataTransfer.dropEffect = 'copy';
+	@HostListener('window:dragover', ['$event']) windragover(e: DragEvent) {
+		if (this._dropAllowed) e.dataTransfer.dropEffect = 'copy';
 		else e.dataTransfer.dropEffect = 'none';
 		e.preventDefault();
 	}
 
-	@HostListener('window:drop', ['$event']) private windrop(e: DragEvent) {
+	@HostListener('window:drop', ['$event']) windrop(e: DragEvent) {
 		e.preventDefault();
-		this.tracker = 0;
+		this._tracker = 0;
 		this.unhighlight();
 	}
 
-	constructor(@Inject(DOCUMENT) private _document: Document, private _zone: NgZone, @Host() public fileService: FileService) {
+	constructor(@Host() public fileService: FileService) {
 		this.files = new Array<File>();
-		this.tracker = 0;
+		this._tracker = 0;
 		this._maxFileSize = this._maxFileNumber = 0;
-		this.highlighted = false;
+		this._highlighted = false;
 		this.destroy = this._destroy.asObservable();
 	}
 
@@ -166,17 +161,13 @@ export class NgxFilezoneComponent implements OnInit, AfterViewInit, OnDestroy {
 
 	}
 
-	ngAfterViewInit(): void {
-		// this._inputField.nativeElement.addEventListener('change', this.receiveFiles.bind(this));
-	}
-
 	ngOnDestroy(): void {
 		this._destroy.next();
 		this._destroy.complete();
 	}
 
 	public clear() {
-		this.fileService.clear();
+		this.fileService.deleteAll();
 	}
 
 	public getAccept(): string {
@@ -184,7 +175,7 @@ export class NgxFilezoneComponent implements OnInit, AfterViewInit, OnDestroy {
 	}
 
 	public addFile(file?: File) {
-		const input = this._document.createElement('input');
+		const input = document.createElement('input');
 		input.type = 'file';
 		if (!this._maxFileNumber || this._maxFileNumber - this.files.length > 1 && !file) input.multiple = true;
 		input.onchange = (e) => {
@@ -214,10 +205,10 @@ export class NgxFilezoneComponent implements OnInit, AfterViewInit, OnDestroy {
 	}
 
 	private highlight() {
-		this.highlighted = true;
+		this._highlighted = true;
 	}
 
 	private unhighlight() {
-		this.highlighted = false;
+		this._highlighted = false;
 	}
 }

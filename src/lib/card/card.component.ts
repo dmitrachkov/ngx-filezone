@@ -20,14 +20,9 @@ export class CardComponent {
 
 	public props: FileProperties;
 
-	private _source: File;
-
 	@Input() set source(file: File) {
 		this._getProperties(file);
-		this._source = file;
 	}
-
-	@Input() private index: number;
 
 	@ViewChild('preview', { read: ViewContainerRef, static: true }) private _preview: ViewContainerRef;
 

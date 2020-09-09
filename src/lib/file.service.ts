@@ -1,5 +1,4 @@
 import { Injectable, Inject } from '@angular/core';
-import { DOCUMENT } from '@angular/common';
 import { DrawImageParameters, FileProperties, FileError } from './interfaces';
 import { Subject, Observable, Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
@@ -31,7 +30,7 @@ export class FileService {
 
 	public readonly errorNotifier: Observable<Array<FileError>>;
 
-	constructor(@Inject(DOCUMENT) private document: Document) {
+	constructor() {
 		this._accept = [];
 		this._files = new Array<File>();
 		this._maxFileSize = this._maxFileNumber = 0;
@@ -47,15 +46,48 @@ export class FileService {
 		});
 	}
 
-	public clear() {
+	/** Deletes all files */
+	public deleteAll() {
 		this._files.length = 0;
 		this._emitFiles();
 	}
 
+	/** Deletes a specified file */
 	public delete(file: File) {
 		const index = this._files.indexOf(file);
 		this._files.splice(index, 1);
 		this._emitFiles();
+	}
+
+	public getAcceptableTypes(): string {
+		return this._accept.join(', ');
+	}
+
+	public getFileProperties(file: File): Promise<FileProperties> {
+		return new Promise<FileProperties>((resolve, reject) => {
+			const properties: FileProperties = {
+				name: file.name,
+				size: file.size,
+				extention: file.name.match(/\.[a-z0-9]+/i)[0] ?? '',
+				type: this._typeOfFile(file.type)
+			};
+
+			const type = properties.type;
+
+			if (type === 'audio' || type === 'image' || type === 'video') {
+				const url = URL.createObjectURL(file);
+				let reader: Promise<FileProperties>;
+				if (type === 'audio') reader = this._getAudioDuration(url);
+				if (type === 'image') reader = this._getImagePreview(url, 250);
+				if (type === 'video') reader = this._getVideoPreview(url, 250);
+
+				reader
+					.then(x => { Object.keys(x).forEach(property => properties[property] = x[property]); })
+					.catch()
+					.finally(() => { URL.revokeObjectURL(url); resolve(properties); });
+
+			} else resolve(properties);
+		});
 	}
 
 	public receiveFiles(inputFiles: FileList): void {
@@ -74,10 +106,6 @@ export class FileService {
 			this._files[index] = newFile;
 			this._emitFiles();
 		}
-	}
-
-	public getAcceptableTypes(): string {
-		return this._accept.join(', ');
 	}
 
 	public setMaxFileNumber(value: number): number {
@@ -126,33 +154,6 @@ export class FileService {
 			this._filesNotifier.next([...this._files]);
 		}
 		return result;
-	}
-
-	public getFileProperties(file: File): Promise<FileProperties> {
-		return new Promise<FileProperties>((resolve, reject) => {
-			const properties: FileProperties = {
-				name: file.name,
-				size: file.size,
-				extention: file.name.match(/\.[a-z0-9]+/i)[0] ?? '',
-				type: this._typeOfFile(file.type)
-			};
-
-			const type = properties.type;
-
-			if (type === 'audio' || type === 'image' || type === 'video') {
-				const url = URL.createObjectURL(file);
-				let reader: Promise<FileProperties>;
-				if (type === 'audio') reader = this._getAudioDuration(url);
-				if (type === 'image') reader = this._getImagePreview(url, 250);
-				if (type === 'video') reader = this._getVideoPreview(url, 250);
-
-				reader
-					.then(x => { Object.keys(x).forEach(property => properties[property] = x[property]); })
-					.catch()
-					.finally(() => { URL.revokeObjectURL(url); resolve(properties); });
-
-			} else resolve(properties);
-		});
 	}
 
 	public sort(previous: number, current: number) {
@@ -227,7 +228,7 @@ export class FileService {
 			// Creating nescessary HTML elements
 			const canvas = document.createElement('canvas');
 			const canvasContext = canvas.getContext('2d');
-			const image = this.document.createElement('img');
+			const image = document.createElement('img');
 
 			image.onload = () => {
 				canvas.width = width;
@@ -264,7 +265,7 @@ export class FileService {
 			// Creating nescessary HTML elements
 			const canvas = document.createElement('canvas');
 			const canvasContext = canvas.getContext('2d');
-			const videoElement = this.document.createElement('video');
+			const videoElement = document.createElement('video');
 
 			// When video metadata is loaded
 			videoElement.onloadedmetadata = () => {

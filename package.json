@@ -12,7 +12,7 @@
 		"drag",
 		"drag-n-drop"
 	],
-	"description": "Sort elements within a list by using drag-n-drop interface without any restrictions by direction",
+	"description": "File input UI with image and video previews and drag-n-drop sorting functionality",
 	"homepage": "https://github.com/dmitrachkov/ngx-filezone#readme",
 	"license": "MIT",
 	"author": {
@@ -29,6 +29,7 @@
 		"url": "https://github.com/dmitrachkov/ngx-filezone.git"
 	},
 	"dependencies": {
-		"tslib": "^2.0.0"
+		"tslib": "^2.0.0",
+		"ng-reorder": "^1.0.0"
 	}
 }

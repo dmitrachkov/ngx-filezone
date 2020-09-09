@@ -13,7 +13,10 @@ export class MenuComponent implements OnInit {
 	@HostBinding('class.opened')
 	public openedMenu: boolean;
 
-	constructor(@Inject(DOCUMENT) private _document: Document) {
+	private readonly _document: Document;
+
+	constructor(@Inject(DOCUMENT) document: any) {
+		this._document = document as Document;
 		this.openedMenu = false;
 	}
 

@@ -2,25 +2,7 @@
 
 Module provides file input UI with image and video previews and drag-n-drop sorting functionality
 
-Run `ng generate component component-name --project ngx-filezone` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module --project ngx-filezone`.
-> Note: Don't forget to add `--project ngx-filezone` or else it will be added to the default project in your `angular.json` file. 
-
-## Build
-
-Run `ng build ngx-filezone` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Publishing
-
-After building your library with `ng build ngx-filezone`, go to the dist folder `cd dist/ngx-filezone` and run `npm publish`.
-
-# NgxFilezone
-
-Module provides file input UI with image and video previews and drag-n-drop sorting functionality
-
-## Instalation
-
-Install with npm  
-`npm install ngx-filezone`
+> see [live example](https://stackblitz.com/edit/ngx-filezone?file=src/app/app.component.html)
 
 ## Usage
 
@@ -88,8 +70,3 @@ Enumeration
 | TYPE = 1     | Not allowed type of file                    |
 | COPY = 2     | The list of files already includes the file |
 | NUMBER = 3   | Beyond of max number of files               |
-
-
-
-## Credits
-This project is based on [Angular's Drag-and-drop module](https://material.angular.io/cdk/drag-drop/) and I really want to thanks everyone Angular team member for creating this awesome framework.

@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { NgxFilezoneComponent } from './main/ngx-filezone.component';
 import { CommonModule } from '@angular/common';
 import { CardComponent } from './card/card.component';
-import { NgxFilezoneService } from './ngx-filezone.service';
 import { FilesizePipe } from './filesize.pipe';
 import { SafePipe } from './safe.pipe';
 import { SvgPreviewComponent } from './svg-preview/svg-preview/svg-preview.component';
@@ -18,6 +17,6 @@ import { MenuComponent } from './menu/menu.component';
 		NgReorderModule
 	],
 	exports: [NgxFilezoneComponent],
-	providers: [NgxFilezoneService]
+	providers: []
 })
 export class NgxFilezoneModule {}
