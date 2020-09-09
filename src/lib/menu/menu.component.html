@@ -1,0 +1,8 @@
+<button id="options" (click)="openedMenu ? closeMenu($event) : openMenu($event)">
+	<svg id="dots" xml:space="preserve" viewBox="0 0 25000 100000">
+		<circle cx="12500" cy="12500" r="12500" />
+		<circle cx="12500" cy="50000" r="12500" />
+		<circle cx="12500" cy="87500" r="12500" />
+	</svg>
+</button>
+<ng-content *ngIf="openedMenu"></ng-content>

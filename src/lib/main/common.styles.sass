@@ -1,0 +1,72 @@
+@use '../variables'
+
+$color-back: variables.$back_color
+$color-font: variables.$font_color
+$primary: variables.$primary
+$accent: variables.$accent
+$warn: variables.$warn
+$size: variables.$size
+$gap: variables.$padding
+$font-family: variables.$font-family
+
+:host
+    display: block
+    position: relative
+    font-family: $font-family
+    color: black
+    font-size: 16px
+    &.highlighted #overlay
+        display: block
+    & #overlay
+        position: absolute
+        box-sizing: border-box
+        width: 100%
+        height: 100%
+        padding: .5em
+        border-radius: 6px
+        background-color: rgba($accent,.7)
+        color: $color-back
+        z-index: 9000
+        display: none
+        font-weight: bold
+        font-size: large
+        & div
+            border: 2px dashed $color-back
+            border-radius: 3px
+            width: calc( 100% - 4px )
+            height: calc( 100% - 4px )
+            display: flex
+            justify-content: center
+            align-items: center
+
+.restrictions
+    font-style: italic
+    font-size: x-small
+    color: $warn
+
+button
+    @include variables.button()
+
+ul
+    margin: 0
+    padding: 0
+li
+    list-style: none
+
+svg
+    @include variables.svg()
+
+@media only screen and (max-width: 1024px)
+    .restrictions
+        font-size: small
+
+@media only screen and (max-width: 768px)
+    .restrictions
+        font-size: smaller
+
+@media only screen and (max-width: 480px)
+    .restrictions
+        font-size: smaller
+
+
+

@@ -1,0 +1,30 @@
+@use '../variables'
+
+$color-back: variables.$back_color
+$color-font: variables.$font_color
+$primary: variables.$primary
+$accent: variables.$accent
+$warn: variables.$warn
+$size: variables.$size
+$gap: variables.$padding
+$font-family: variables.$font-family
+
+:host
+    display: flex
+    flex-direction: row-reverse
+    align-items: flex-start
+    & button#options
+        @include variables.button()
+        & svg#dots
+            @include variables.svg()
+            width: .4em
+            filter: drop-shadow(0px 0px 1px #{$color-font})
+            & circle
+                transition: fill 250ms ease
+                fill: $color-back
+        &:hover
+            filter: drop-shadow(0px 0px 1px #{$color-back})
+            & #dots circle
+                fill: $color-font
+    &.opened button#options
+        background-color: $color-back

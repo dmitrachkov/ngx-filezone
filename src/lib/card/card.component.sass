@@ -1,0 +1,125 @@
+@use '../variables'
+
+$color-back: variables.$back_color
+$color-font: variables.$font_color
+$primary: variables.$primary
+$accent: variables.$accent
+$warn: variables.$warn
+$size: variables.$size
+$gap: variables.$padding
+$font-family: variables.$font-family
+
+:host
+	display: block
+	box-sizing: border-box
+	width: $size
+	padding: $gap
+	position: relative
+	transition: all 200ms ease-out
+	background-color: $color-back
+	color: $color-font
+
+ul
+	margin: 0
+	padding: 0
+
+li
+	list-style: none
+
+figure
+	width: 100%
+	margin: 0
+	& figcaption
+		padding: 2px
+		height: calc(#{$size} * .25)
+		display: flex
+		flex-direction: column
+		justify-content: space-between 
+		box-sizing: border-box
+		overflow: hidden
+		transition: background-color 250ms ease
+		& #title
+			margin-top: 0
+			position: relative
+			white-space: nowrap
+			font-size: .9em
+		& #attributes
+			display: flex
+			justify-content: space-between
+			flex-direction: row
+			flex-wrap: nowrap
+			font-size: .6em
+			& li
+				flex-basis: 30%
+				text-align: center
+				&:first-child
+					text-align: left
+				&:last-child
+					text-align: right
+	& #frame
+		position: relative
+		width: calc( #{$size} - 2 * #{$gap} )
+		height: calc( #{$size} - 2 * #{$gap} )
+		overflow: hidden
+		&::after
+			content: ""
+			display: block
+			position: absolute
+			top: 0
+			left: 0
+			bottom: 0
+			right: 0
+			box-shadow: inset 0px 0px 2px rgba($color-font, .7)
+		& img
+			width: 100%
+			height: 100%
+			object-fit: cover
+
+
+@media only screen and (max-width: 1024px)
+	:host
+		width: calc(#{$size} * .9)
+	
+	figure
+		& figcaption
+			height: calc((#{$size} * .9) * .25)
+			& #title
+				font-size: calc(.9em * .9)
+			& #attributes
+				font-size: calc(.6em * .9)
+		& #frame
+			width: calc((#{$size} * .9) - 2 * #{$gap})
+			height: calc((#{$size} * .9) - 2 * #{$gap})
+
+@media only screen and (max-width: 768px)
+	:host
+		width: calc(#{$size} * .8)
+	
+	figure
+		& figcaption
+			height: calc((#{$size} * .8) * .25)
+			& #title
+				font-size: calc(.9em * .8)
+			& #attributes
+				font-size: calc(.6em * .8)
+		& #frame
+			width: calc((#{$size} * .8) - 2 * #{$gap})
+			height: calc((#{$size} * .8) - 2 * #{$gap})
+
+@media only screen and (max-width: 480px)
+	:host
+		width: calc(#{$size} * .7)
+	
+	figure
+		& figcaption
+			padding: 0
+			height: calc((#{$size} * .7) * .25)
+			& #title
+				font-size: calc(.9em * .7)
+			& #attributes
+				font-size: calc(.6em * .7)
+		& #frame
+			width: calc((#{$size} * .7) - 2 * #{$gap})
+			height: calc((#{$size} * .7) - 2 * #{$gap})
+
+

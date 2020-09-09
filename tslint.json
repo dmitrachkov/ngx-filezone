@@ -1,0 +1,10 @@
+{
+	"extends": "../../tslint.json",
+	"rules": {
+		"directive-selector": [true, "attribute", "fz", "camelCase"],
+		"component-selector": [true, "element", "fz", "kebab-case"],
+		"no-empty": false,
+		"no-output-native": false,
+		"no-unused-expression": false
+	}
+}

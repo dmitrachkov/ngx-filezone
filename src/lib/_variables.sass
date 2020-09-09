@@ -1,0 +1,25 @@
+$primary: deepskyblue
+$warn: #cd3a3a
+$accent: #58c292
+$font_color: #333333
+$back_color: white
+$size: 10em
+$padding: 2px
+$font-family: 'Segoe UI', sans-serif
+
+@mixin svg()
+    shape-rendering: geometricPrecision
+    text-rendering: geometricPrecision 
+    image-rendering: optimizeQuality 
+    fill-rule: evenodd 
+    clip-rule: evenodd
+
+@mixin button() 
+    border: none
+    background: none
+    padding: .5em
+    cursor: pointer
+    font-family: $font-family
+    &:focus
+        outline: none
+    
