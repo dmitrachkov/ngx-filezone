@@ -1,4 +1,4 @@
-@use '../variables'
+@use '../../variables'
 
 $color-back: variables.$back_color
 $color-font: variables.$font_color
@@ -55,6 +55,11 @@ li
 
 svg
     @include variables.svg()
+
+
+button#test
+    @include variables.button()
+    @include variables.buttonHover()
 
 @media only screen and (max-width: 1024px)
     .restrictions

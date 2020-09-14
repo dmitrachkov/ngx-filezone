@@ -35,8 +35,8 @@
 		<div>
 			<span *ngIf="restrictions" class="restrictions">{{restrictions}}</span>
 		</div>
-		<ul id="fileList" [@list] dragCollection (dropCompleted)="sort($event)">
-			<li *ngFor="let file of files; let i = index;" class="card" [@card] dragUnit>
+		<ul id="fileList" dragCollection (dropCompleted)="sort($event)">
+			<li *ngFor="let file of files; let i = index;" class="card" dragUnit>
 				<fz-card [source]=file (changerequest)="addFile($event)" (deleterequest)="deleteFile($event)">
 				</fz-card>
 				<fz-menu class="options" dragRejector>
@@ -72,7 +72,7 @@
 					</ul>
 				</fz-menu>
 			</li>
-			<button id="add" (click)="addFile()" [@card] *ngIf="allowAddFiles" [@card]>
+			<button autoBlur id="add" (click)="addFile()" *ngIf="allowAddFiles">
 				<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" version="1.1" viewBox="0 0 800 1000"
 					xmlns:xlink="http://www.w3.org/1999/xlink">
 					<rect class="gray-fill" width="800" height="1000" />
@@ -87,3 +87,5 @@
 		</button>
 	</div>
 </ng-template>
+
+<button id="test">test</button>

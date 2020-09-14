@@ -1,4 +1,4 @@
-export interface FileProperties {
+export interface IFileProperties {
 	size?: number;
 	name?: string;
 	extention?: string;
@@ -8,20 +8,20 @@ export interface FileProperties {
 	url?: string;
 }
 
-export interface DrawImageParameters {
+export interface IDrawImageParameters {
 	dx: number;
 	dy: number;
 	dw: number;
 	dh: number;
 }
 
-export interface AcceptMediaList {
+export interface IAcceptMediaList {
 	all: string[];
 	mediaType: string[];
 	fileExtension: string[];
 }
 
-export interface FileError {
+export interface IFileError {
 	error: number;
 	file: File;
 }

@@ -1,4 +1,4 @@
-@use '../variables'
+@use '../../variables'
 
 $color-back: variables.$back_color
 $color-font: variables.$font_color
@@ -42,7 +42,7 @@ ul#fileList
     display: flex
     flex-flow: wrap
     align-items: center
-    & .card.drag-unit
+    & li.card.drag-unit
         position: relative
         box-shadow: 0 1px 3px mix($color-font, white, 40)
         margin: .5em

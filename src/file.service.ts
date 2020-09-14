@@ -1,10 +1,10 @@
-import { Injectable, Inject } from '@angular/core';
-import { DrawImageParameters, FileProperties, FileError } from './interfaces';
+import { Injectable } from '@angular/core';
+import { IDrawImageParameters, IFileProperties, IFileError } from './interfaces';
 import { Subject, Observable, Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { NgxFilezoneComponent } from './main/ngx-filezone.component';
+import { NgxFilezoneComponent } from './components/main/ngx-filezone.component';
 import { parseFileSizeInBytes, secondsToTimeString } from './utils';
-import { FileErrorCode } from './errors.enum';
+import { FileErrorCode } from './enumerations';
 import { reorderItems } from 'ng-reorder';
 
 @Injectable()
@@ -14,7 +14,7 @@ export class FileService {
 
 	private _filesNotifier: Subject<Array<File>>;
 
-	private _errorNotifier: Subject<Array<FileError>>;
+	private _errorNotifier: Subject<Array<IFileError>>;
 
 	private _maxFileNumber!: number;
 
@@ -28,14 +28,14 @@ export class FileService {
 
 	public readonly filesNotifier: Observable<Array<File>>;
 
-	public readonly errorNotifier: Observable<Array<FileError>>;
+	public readonly errorNotifier: Observable<Array<IFileError>>;
 
 	constructor() {
 		this._accept = [];
 		this._files = new Array<File>();
 		this._maxFileSize = this._maxFileNumber = 0;
 		this._filesNotifier = new Subject<Array<File>>();
-		this._errorNotifier = new Subject<Array<FileError>>();
+		this._errorNotifier = new Subject<Array<IFileError>>();
 		this.filesNotifier = this._filesNotifier.asObservable();
 		this.errorNotifier = this._errorNotifier.asObservable();
 	}
@@ -63,9 +63,9 @@ export class FileService {
 		return this._accept.join(', ');
 	}
 
-	public getFileProperties(file: File): Promise<FileProperties> {
-		return new Promise<FileProperties>((resolve, reject) => {
-			const properties: FileProperties = {
+	public getFileProperties(file: File): Promise<IFileProperties> {
+		return new Promise<IFileProperties>((resolve, reject) => {
+			const properties: IFileProperties = {
 				name: file.name,
 				size: file.size,
 				extention: file.name.match(/\.[a-z0-9]+/i)[0] ?? '',
@@ -76,7 +76,7 @@ export class FileService {
 
 			if (type === 'audio' || type === 'image' || type === 'video') {
 				const url = URL.createObjectURL(file);
-				let reader: Promise<FileProperties>;
+				let reader: Promise<IFileProperties>;
 				if (type === 'audio') reader = this._getAudioDuration(url);
 				if (type === 'image') reader = this._getImagePreview(url, 250);
 				if (type === 'video') reader = this._getVideoPreview(url, 250);
@@ -169,7 +169,7 @@ export class FileService {
 		this._filesNotifier.next([...this._files]);
 	}
 
-	private _emitErrors(errors: Array<FileError>) {
+	private _emitErrors(errors: Array<IFileError>) {
 		this._errorNotifier.next(errors);
 	}
 
@@ -178,9 +178,9 @@ export class FileService {
 	 * @param file A video file you want to get a thumbnail from
 	 * @returns Promise<FileProperties> with fulfilled duration field
 	 */
-	private _getAudioDuration(fileURL: string): Promise<FileProperties> {
+	private _getAudioDuration(fileURL: string): Promise<IFileProperties> {
 		return new Promise((resolve, reject) => {
-			const properties: FileProperties = {};
+			const properties: IFileProperties = {};
 			const audio = new Audio();
 
 			audio.onloadedmetadata = () => {
@@ -202,7 +202,7 @@ export class FileService {
 	 * @param widthToFit width of canvas
 	 * @param heightToFit height of canvas
 	 */
-	private _getCanvasParameters(width: number, height: number, widthToFit: number, heightToFit: number): DrawImageParameters {
+	private _getCanvasParameters(width: number, height: number, widthToFit: number, heightToFit: number): IDrawImageParameters {
 
 		const divider = Math.min(width / widthToFit, height / heightToFit);
 
@@ -211,7 +211,7 @@ export class FileService {
 		const dx = Math.floor((widthToFit - dw) / 2);
 		const dy = Math.floor((heightToFit - dh) / 2);
 
-		return { dx, dy, dw, dh } as DrawImageParameters;
+		return { dx, dy, dw, dh } as IDrawImageParameters;
 	}
 
 	/**
@@ -221,9 +221,9 @@ export class FileService {
 	 * @param height heidht of a needed thumbnail (Default equal to width)
 	 * @returns Promise<FileProperties> with fulfilled resolution and url fields
 	 */
-	private _getImagePreview(fileURL: string, width: number, height: number = width): Promise<FileProperties> {
+	private _getImagePreview(fileURL: string, width: number, height: number = width): Promise<IFileProperties> {
 		return new Promise((resolve, reject) => {
-			const result: FileProperties = {};
+			const result: IFileProperties = {};
 
 			// Creating nescessary HTML elements
 			const canvas = document.createElement('canvas');
@@ -258,9 +258,9 @@ export class FileService {
 	 * @param height heidht of a needed thumbnail (Default equal to width)
 	 * @returns Promise<FileProperties> with fulfilled resolution, duration and url fields
 	 */
-	private _getVideoPreview(fileURL: string, width: number, height: number = width): Promise<FileProperties> {
+	private _getVideoPreview(fileURL: string, width: number, height: number = width): Promise<IFileProperties> {
 		return new Promise((resolve, reject) => {
-			const result: FileProperties = {};
+			const result: IFileProperties = {};
 
 			// Creating nescessary HTML elements
 			const canvas = document.createElement('canvas');
@@ -307,7 +307,7 @@ export class FileService {
 
 	private _fileFilter(files: Array<File>): Array<File> {
 
-		const errors = new Array<FileError>();
+		const errors = new Array<IFileError>();
 		const result = new Array<File>();
 
 		// First step. Filtering files out by size if that restriction exists
@@ -315,7 +315,7 @@ export class FileService {
 		else {
 			files.forEach(file => {
 				file.size <= this._maxFileSize ?
-					result.push(file) : errors.push({ error: FileErrorCode.SIZE, file } as FileError);
+					result.push(file) : errors.push({ error: FileErrorCode.SIZE, file } as IFileError);
 			});
 		}
 
@@ -328,7 +328,7 @@ export class FileService {
 				if (this._accept.includes(fileExt) ||
 					this._accept.includes(file.type) ||
 					this._accept.includes(`${file.type.split('/')[0]}/*`)) validfiles.push(file);
-				else errors.push({ error: FileErrorCode.TYPE, file } as FileError);
+				else errors.push({ error: FileErrorCode.TYPE, file } as IFileError);
 			});
 			result.length = 0;
 			result.push(...validfiles);
@@ -339,7 +339,7 @@ export class FileService {
 
 			for (const file of result) {
 				if (!!this._files.find((x) => x.name === file.name && x.size === file.size)) {
-					errors.push({ error: FileErrorCode.COPY, file } as FileError);
+					errors.push({ error: FileErrorCode.COPY, file } as IFileError);
 					result.splice(result.indexOf(file), 1);
 				}
 			}
@@ -349,7 +349,7 @@ export class FileService {
 		if (!!this._maxFileNumber && files.length + this._files.length > this._maxFileNumber) {
 			const length = this._maxFileNumber - this._files.length;
 			result.splice(length, result.length).forEach((file: File) => {
-				errors.push({ error: FileErrorCode.NUMBER, file } as FileError);
+				errors.push({ error: FileErrorCode.NUMBER, file } as IFileError);
 			});
 			result.length = length;
 		}

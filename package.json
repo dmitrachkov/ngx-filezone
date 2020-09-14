@@ -1,6 +1,6 @@
 {
 	"name": "ngx-filezone",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"keywords": [
 		"sort",
 		"sortable",
@@ -30,6 +30,6 @@
 	},
 	"dependencies": {
 		"tslib": "^2.0.0",
-		"ng-reorder": "^1.0.0"
+		"ng-reorder": "^1.0.1"
 	}
 }

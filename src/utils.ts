@@ -1,4 +1,4 @@
-import { FileSizeExp } from './enums';
+import { FileSizeExp } from './enumerations';
 
 export function convertFileSize(value: number): string {
 

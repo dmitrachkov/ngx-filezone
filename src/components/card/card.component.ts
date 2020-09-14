@@ -6,9 +6,9 @@ import {
 	ViewContainerRef,
 	ComponentFactoryResolver,
 } from '@angular/core';
-import { FileService } from '../file.service';
-import { SvgPreviewComponent } from '../svg-preview/svg-preview/svg-preview.component';
-import { FileProperties } from '../interfaces';
+import { FileService } from '../../file.service';
+import { SvgPreviewComponent } from '../svg-preview/svg-preview.component';
+import { IFileProperties } from '../../interfaces';
 
 @Component({
 	selector: 'fz-card',
@@ -18,7 +18,7 @@ import { FileProperties } from '../interfaces';
 })
 export class CardComponent {
 
-	public props: FileProperties;
+	public props: IFileProperties;
 
 	@Input() set source(file: File) {
 		this._getProperties(file);

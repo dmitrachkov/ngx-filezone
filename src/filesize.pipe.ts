@@ -4,7 +4,7 @@ import { convertFileSize } from './utils';
 @Pipe({
 	name: 'filesize',
 })
-export class FilesizePipe implements PipeTransform {
+export class FileSizePipe implements PipeTransform {
 
 	transform(value: number): string {
 		return convertFileSize(value);

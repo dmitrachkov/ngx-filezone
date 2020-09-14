@@ -5,3 +5,10 @@ export enum FileSizeExp {
 	GB = 30,
 	TB = 40
 }
+
+export enum FileErrorCode {
+	SIZE,
+	TYPE,
+	COPY,
+	NUMBER
+}
