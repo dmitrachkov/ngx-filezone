@@ -1,6 +1,10 @@
 import { FileSizeExp } from './enumerations';
 
-export function convertFileSize(value: number): string {
+/** Transforms value in bytes to readable string using base 2 (binary) system -
+ * 1 KB equal to 1024 bytes
+ * @example convertFileSize(5833523) => '5.56 MB'
+ */
+export function convertFileSizeToString(value: number): string {
 
 	let exp = Math.log2(value);
 
@@ -23,7 +27,12 @@ export function convertFileSize(value: number): string {
 	}
 }
 
-export function parseFileSizeInBytes(value: string): number {
+/** Converting string representing size of file (4 MB, 5.35 KB, etc) to numeric value using base 2 (binary) system -
+ * 1 KB equal to 1024 bytes
+ * @returns Numeric value in bytes or 0 if no value has found
+ * @example parseFileSizeInBytes('2.85MB') => 2988442
+ */
+export function convertFileSizeToBytes(value: string): number {
 
 	const _value = parseFloat(value);
 	const _exp = value.match(/(B|KB|MB|GB)/i);
@@ -35,6 +44,7 @@ export function parseFileSizeInBytes(value: string): number {
 
 }
 
+/** Transforms numeric value in seconds to HH:MM:SS string or MM:SS if hours is equal to 0 */
 export function secondsToTimeString(time: number): string {
 	const value = Math.round(time);
 	let hours: number | string = Math.floor(value / 3600);
@@ -47,4 +57,52 @@ export function secondsToTimeString(time: number): string {
 
 	if (!hours) return [minutes, seconds].join(':');
 	return [hours, minutes, seconds].join(':');
+}
+
+/**
+ * @param array array to reorder
+ * @param begin the index which is moving in the array
+ * @param end the index where the array[begin] is moving to
+ */
+export function reorderItems<T = any>(array: T[], begin: number, end: number): T[] {
+
+	if (array.length === 0) {
+		return;
+	}
+
+	begin = fit(begin, array.length - 1);
+
+	end = fit(end, array.length - 1);
+
+	if (begin === end || end === -1 || begin === -1) {
+		return array;
+	}
+
+	const shift = begin < end ? 1 : -1;
+	const anchor = array[begin];
+
+	for (let i = begin; i !== end; i += shift) {
+		array[i] = array[i + shift];
+	}
+
+	array[end] = anchor;
+
+	return array;
+}
+
+/**
+ * @param array array to reorder
+ * @param a the index of first element
+ * @param b the index of second element
+ */
+
+/** To ensure to get a number not less than zero and not greater than a given max value
+ * @param value number to check
+ * @param max max value
+ */
+export function fit(value: number, max: number): number {
+	if (isNaN(value) || value === null) {
+		return -1;
+	}
+	return Math.max(0, Math.min(value, max));
 }

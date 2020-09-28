@@ -1,10 +1,9 @@
 {
 	"name": "ngx-filezone",
-	"version": "1.0.1",
+	"version": "1.1.0",
 	"keywords": [
 		"sort",
 		"sortable",
-		"card",
 		"input",
 		"preview",
 		"file",
@@ -12,7 +11,7 @@
 		"drag",
 		"drag-n-drop"
 	],
-	"description": "File input UI with image and video previews and drag-n-drop sorting functionality",
+	"description": "File input UI with image and video previews",
 	"homepage": "https://github.com/dmitrachkov/ngx-filezone#readme",
 	"license": "MIT",
 	"author": {
@@ -29,7 +28,6 @@
 		"url": "https://github.com/dmitrachkov/ngx-filezone.git"
 	},
 	"dependencies": {
-		"tslib": "^2.0.0",
-		"ng-reorder": "^1.0.1"
+		"tslib": "^2.0.0"
 	}
 }

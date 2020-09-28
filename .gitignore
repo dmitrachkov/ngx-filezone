@@ -1,5 +1,9 @@
 /node_modules
 
+karma.conf.js
+
+tsconfig.spec.json
+
 # System Files
 .DS_Store
 Thumbs.db
