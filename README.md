@@ -126,17 +126,14 @@ Singletone. Has one method *getFileProperties* which returns file media data wit
 
 ## Utilities
 
-| `convertFileSizeToString(value: number) => string`   |
-| -------------------------------------------- |
-| Transforms value in bytes to readable string |
+`convertFileSizeToString(value: number) => string`   
+Transforms value in bytes to readable string  
 
-| `convertFileSizeToBytes(value: string) => number`                                 |
-| --------------------------------------------------------------------------------- |
-| Converting string representing size of file (4 MB, 5.35 KB, etc) to numeric value |
+`convertFileSizeToBytes(value: string) => number`  
+Converting string representing size of file (4 MB, 5.35 KB, etc) to numeric value  
 
-| `secondsToTimeString(time: number) => string`                                          |
-| -------------------------------------------------------------------------------------- |
-| Transforms numeric value in seconds to HH:MM:SS string or MM:SS if hours is equal to 0 |
+`secondsToTimeString(time: number) => string`  
+Transforms numeric value in seconds to HH:MM:SS string or MM:SS if hours is equal to 0  
 
 > The convertFileSizeToString and convertFileSizeToBytes functions 
 > use base 2 (binary) system where 1KB equal to 1024 bytes

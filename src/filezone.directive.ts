@@ -74,6 +74,8 @@ export class Filezone implements OnInit, OnDestroy {
 
 	private _windowDragOverTracker = 0;
 
+	private _document: HTMLDocument;
+
 	private _dropEffect: 'copy' | 'none' = 'none';
 
 	/** Array of files that currently inside the filezone */
@@ -90,9 +92,11 @@ export class Filezone implements OnInit, OnDestroy {
 	}
 
 	constructor(
-		@Self() private _service: FileService, @Inject(DOCUMENT) private _document: HTMLDocument,
+		@Self() private _service: FileService, @Inject(DOCUMENT) document: any,
 		private _zone: NgZone, private _host: ElementRef
-	) { }
+	) {
+		this._document = document as HTMLDocument;
+	}
 
 	public ngOnInit() {
 		this._zone.runOutsideAngular(() => {
@@ -129,6 +133,7 @@ export class Filezone implements OnInit, OnDestroy {
 	}
 
 	public ngOnDestroy() {
+		this.deleteAllFiles();
 		this._destroy.next();
 		this._destroy.complete();
 	}
